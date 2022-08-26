@@ -1,0 +1,6 @@
+/target
+/dist
+*.sh
+.idea
+*.key
+*.crt
