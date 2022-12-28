@@ -17,4 +17,10 @@ Building the application is then straightforward:
 
 Follow the instructions given by the application.
 
+## Listen on specific IPv4 or IPv6 address (v0.2.0)
+
+You can specify which IP address the application will listen on. By default, the application listens on 127.0.0.1. 
+
+`$ ./netatmo-auth-cli --client CLIENT_ID --secret CLIENT_SECRET --host 10.0.0.1`
+
 **It's the alpha version and tested only on macOS.** 

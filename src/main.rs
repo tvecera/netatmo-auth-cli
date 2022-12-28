@@ -1,9 +1,13 @@
 #[macro_use]
 extern crate rocket;
 
+use std::net::{IpAddr, Ipv4Addr};
+
 use rocket::{Config, Shutdown};
 use serde::{Deserialize, Serialize};
 use structopt::StructOpt;
+use structopt_flags::GetWithDefault;
+use structopt_flags::HostOpt;
 use uuid::Uuid;
 
 #[derive(StructOpt)]
@@ -29,8 +33,12 @@ struct Opt {
 
     #[structopt(short = "p", long = "port", default_value = "9090")]
     port: u16,
+
+    #[structopt(flatten)]
+    host_ip: HostOpt,
 }
 
+const HOST_DEFAULT: IpAddr = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
 
 #[derive(Serialize, Deserialize)]
 pub struct Login {
@@ -130,7 +138,11 @@ async fn success(state: &str, code: &str, shutdown: Shutdown) -> String {
 
 fn get_redirect_uri() -> String {
     let opt = Opt::from_args();
-    let config = Config { port: opt.port, ..Config::release_default() };
+    let config = Config {
+        address: opt.host_ip.get_with_default(HOST_DEFAULT),
+        port: opt.port,
+        ..Config::release_default()
+    };
     let result;
 
     if opt.redirect_uri.is_none() {
@@ -146,7 +158,11 @@ fn get_redirect_uri() -> String {
 async fn main() -> Result<(), rocket::Error> {
     println!("Netatmo OAUTH login\n");
     let opt = Opt::from_args();
-    let config = Config { port: opt.port, ..Config::release_default() };
+    let config = Config {
+        address: opt.host_ip.get_with_default(HOST_DEFAULT),
+        port: opt.port,
+        ..Config::release_default()
+    };
 
     let rocket = rocket::custom(&config)
         .mount("/", routes![success])

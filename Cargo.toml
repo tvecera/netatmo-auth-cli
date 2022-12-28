@@ -1,6 +1,6 @@
 [package]
 name = "netatmo-auth-cli"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Tomas Vecera <info@tomasvecera.cz>"]
 description = """
 Simple Netatmo Connect APIs oauth client.
@@ -11,6 +11,7 @@ edition = "2021"
 
 [dependencies]
 structopt = "0.3.26"
+structopt-flags = "0.3.6"
 rocket = "0.5.0-rc.2"
 reqwest = { version = "0.11", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
